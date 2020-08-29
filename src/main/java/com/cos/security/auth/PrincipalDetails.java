@@ -2,6 +2,7 @@ package com.cos.security.auth;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Enumeration;
 
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -28,51 +29,47 @@ public class PrincipalDetails implements UserDetails{
 	//해당 유저의 권한을 리턴하는 곳
 	@Override
 	public Collection<? extends GrantedAuthority> getAuthorities() {
-		Collection<GrantedAuthority> collection = new ArrayList<>();
-		collection.add(new GrantedAuthority() {
+		Collection<GrantedAuthority> collection = new ArrayList<>(); //String Type을 반한하기 위하여 collection.add로 메서드 오버라이드
+		collection.add(new GrantedAuthority() {					
 			@Override
 			public String getAuthority() {
-				String roleType = new (String)user.getRole();
-				return (String)user.getRole();
+				return user.getRole().toString();   //String Type을 리턴해줘야하는데 Collcetion GrantedAuthority타입으로 정해져있음
 			}
-		})
+		});
 		return collection;
 	}
 
 	@Override
 	public String getPassword() {
-		// TODO Auto-generated method stub
-		return null;
+		return user.getPassword();
 	}
 
 	@Override
 	public String getUsername() {
 		// TODO Auto-generated method stub
-		return null;
+		return user.getUsername();
 	}
 
-	@Override
+	@Override //계정이 만료되었니?
 	public boolean isAccountNonExpired() {
-		// TODO Auto-generated method stub
-		return false;
+		return true;
 	}
 
-	@Override
+	@Override //계정 잠겼어? 
 	public boolean isAccountNonLocked() {
-		// TODO Auto-generated method stub
-		return false;
+		return true;
 	}
 
-	@Override
+	@Override//계정이 일년이지났니?너무 오래사용한건 아니니?
 	public boolean isCredentialsNonExpired() {
 		// TODO Auto-generated method stub
-		return false;
+		return true;
 	}
 
-	@Override
+	@Override //계정이 활성화 되어있니?
 	public boolean isEnabled() {
 		// TODO Auto-generated method stub
-		return false;
+		return true;
 	}
 
 }
