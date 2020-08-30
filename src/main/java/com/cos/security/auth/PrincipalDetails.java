@@ -3,12 +3,16 @@ package com.cos.security.auth;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Enumeration;
+import java.util.Map;
 
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.oauth2.core.user.OAuth2User;
 
 import com.cos.security.model.RoleType;
 import com.cos.security.model.User;
+
+import lombok.Getter;
 
 //시큐리티가 /login주소 요청이오면 낚아채서 로그인을 진행시킨다.
 //로그인을 진행이  완료가되면 시큐리티 session을 만들어줍니다. (시큐리티 자신만의 세션) (SecurityContextHolder)
@@ -17,7 +21,8 @@ import com.cos.security.model.User;
 
 //Security session => Authentication => Userdetails
 
-public class PrincipalDetails implements UserDetails{
+@Getter
+public class PrincipalDetails implements UserDetails,OAuth2User{
 
 	private User user; //User정보를 넣어야 하기때문에 콤포지션을 해준다.
 	
@@ -33,7 +38,7 @@ public class PrincipalDetails implements UserDetails{
 		collection.add(new GrantedAuthority() {					
 			@Override
 			public String getAuthority() {
-				return user.getRole().toString();   //String Type을 리턴해줘야하는데 Collcetion GrantedAuthority타입으로 정해져있음
+				return user.getRole().toString();  //String Type을 리턴해줘야하는데 Collcetion GrantedAuthority타입으로 정해져있음
 			}
 		});
 		return collection;
@@ -70,6 +75,16 @@ public class PrincipalDetails implements UserDetails{
 	public boolean isEnabled() {
 		// TODO Auto-generated method stub
 		return true;
+	}
+
+	@Override
+	public Map<String, Object> getAttributes() {
+		return null;
+	}
+
+	@Override
+	public String getName() {
+		return null;
 	}
 
 }

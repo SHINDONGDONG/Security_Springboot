@@ -3,6 +3,8 @@ package com.cos.security.model;
 import java.sql.Timestamp;
 
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -21,7 +23,13 @@ public class User {
 	private String username;
 	private String password;
 	private String email;
-	private RoleType role; //롤타입으로 강제성부여
+	
+//	@Enumerated(EnumType.STRING)
+	private String role; //롤타입으로 강제성부여
+	
+	private String provider;
+	private String providerId;
+	
 	
 	@CreationTimestamp
 	private Timestamp createDate; //sql의 timestapm
