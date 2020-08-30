@@ -25,10 +25,16 @@ import lombok.Getter;
 public class PrincipalDetails implements UserDetails,OAuth2User{
 
 	private User user; //User정보를 넣어야 하기때문에 콤포지션을 해준다.
-	
+	private Map<String, Object> attributes; //oauth에 대한 정보를 맵으로 넣어줌
 	//생성자 
 	public PrincipalDetails(User user) {
 		this.user =user; 
+	}
+	
+	//oauth, 생성자 
+	public PrincipalDetails(User user,Map<String,Object> attributes) {
+		this.user =user; 
+		this.attributes=attributes; 
 	}
 	
 	//해당 유저의 권한을 리턴하는 곳
@@ -38,7 +44,7 @@ public class PrincipalDetails implements UserDetails,OAuth2User{
 		collection.add(new GrantedAuthority() {					
 			@Override
 			public String getAuthority() {
-				return user.getRole().toString();  //String Type을 리턴해줘야하는데 Collcetion GrantedAuthority타입으로 정해져있음
+				return "ROLE_"+user.getRole();  //String Type을 리턴해줘야하는데 Collcetion GrantedAuthority타입으로 정해져있음
 			}
 		});
 		return collection;
@@ -50,10 +56,10 @@ public class PrincipalDetails implements UserDetails,OAuth2User{
 	}
 
 	@Override
-	public String getUsername() {
-		// TODO Auto-generated method stub
-		return user.getUsername();
-	}
+		public String getUsername() {
+			// TODO Auto-generated method stub
+			return user.getUsername();
+		}
 
 	@Override //계정이 만료되었니?
 	public boolean isAccountNonExpired() {
@@ -79,7 +85,7 @@ public class PrincipalDetails implements UserDetails,OAuth2User{
 
 	@Override
 	public Map<String, Object> getAttributes() {
-		return null;
+		return attributes;
 	}
 
 	@Override

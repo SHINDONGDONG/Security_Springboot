@@ -66,7 +66,8 @@ public class IndexController {
 
 	
 	@GetMapping("/user")
-	public @ResponseBody String user() {
+	public @ResponseBody String user(@AuthenticationPrincipal PrincipalDetails principalDetails) {
+		System.out.println("principal : " + principalDetails.getUser());
 		return "user";
 	}
 	
@@ -105,7 +106,7 @@ public class IndexController {
 	
 	@PostMapping("/join") //Get이 아니라 새로운 추가(생성이라 post) get (read) post(insert) put(update) delete(delete)
 	public String join(User user) {
-		user.setRole("ROLE_USER"); //User role타입은 회원가입할때 없으니 넣어준다.
+		user.setRole(RoleType.USER); //User role타입은 회원가입할때 없으니 넣어준다.
 		String rawPassword = user.getPassword();  //입력받은 password를 rawPassword에 넣어준다.
 		String encPassword = bCryptPasswordEncoder.encode(rawPassword); // encPassword는 rawpassword를 암호화 시켜준다
 		user.setPassword(encPassword); //user DTO에 암호화된 password를 set해준다.
